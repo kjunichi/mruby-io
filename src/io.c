@@ -699,6 +699,8 @@ mrb_value
 mrb_io_close_write(mrb_state *mrb, mrb_value self)
 {
   struct mrb_io *fptr;
+  int n;
+  
   fptr = io_get_open_fptr(mrb, self);
   n = close(fptr->fd2);
   if (n == 0) {
