@@ -696,6 +696,18 @@ mrb_io_close(mrb_state *mrb, mrb_value self)
 }
 
 mrb_value
+mrb_io_close_write(mrb_state *mrb, mrb_value self)
+{
+  struct mrb_io *fptr;
+  fptr = io_get_open_fptr(mrb, self);
+  n = close(fptr->fd2);
+  if (n == 0) {
+    fptr->fd2 = -1;
+  }
+  return mrb_nil_value();
+}
+
+mrb_value
 mrb_io_closed(mrb_state *mrb, mrb_value io)
 {
   struct mrb_io *fptr;
@@ -1059,6 +1071,7 @@ mrb_init_io(mrb_state *mrb)
   mrb_define_class_method(mrb, io, "sysopen", mrb_io_s_sysopen, MRB_ARGS_ANY());
 #ifndef _WIN32
   mrb_define_class_method(mrb, io, "_pipe", mrb_io_s_pipe, MRB_ARGS_NONE());
+  mrb_define_method(mrb, io, "close_write",      mrb_io_close_write,      MRB_ARGS_NONE());
 #endif
 
   mrb_define_method(mrb, io, "initialize", mrb_io_initialize, MRB_ARGS_ANY());    /* 15.2.20.5.21 (x)*/
